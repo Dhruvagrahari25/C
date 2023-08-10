@@ -45,6 +45,27 @@ void InsertAtEnd(struct node *nodeptr, int data)
     NewNode->data = data;
 }
 
+void InsertAtX(struct node* Nodeptr, int count, int Data){
+    struct node* NewNode = (struct node*)malloc(sizeof(struct node));
+    struct node* temp = Nodeptr;
+    
+    for (int i = 1; i < count-1; i++)
+    {
+        temp = temp->next;
+    }
+    NewNode->next = temp->next; 
+    temp->next = NewNode;
+    NewNode->data = Data;
+}
+
+void DeleteAtX(struct node* Nodeptr, int count){
+    struct node* temp = Nodeptr;
+    for (int i = 0; i < count; i++)
+    {
+        temp = temp->next;
+    }
+    temp->next = temp->next->next;
+}
 
 int main()
 {
@@ -74,6 +95,16 @@ int main()
     scanf("%d",&DataAtEnd);
     InsertAtEnd(nodeptr2,DataAtEnd);
 
+    printf("Enter data to be inserted in the middle:");
+    int DataAtX;
+    scanf("%d",&DataAtX);
+    InsertAtX(nodeptr2, 2, DataAtX);
+
+    printf("Enter the position of the node to be deleted:");
+    int count = 0;
+    scanf("%d",&count);
+    DeleteAtX(nodeptr2,count);
+
     if (listptr2->head == NULL)
     {
         printf("List is Empty\n");
@@ -82,7 +113,5 @@ int main()
     {
         Traverse(listptr2, nodeptr2);
     }
-
-
     return 0;
 }
