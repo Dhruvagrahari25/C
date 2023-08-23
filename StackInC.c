@@ -1,91 +1,134 @@
 #include <stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
 
 #define max_size 100
 
-struct stack{
+struct stack
+{
     int top;
     int data[max_size];
 };
 
-void initializeStack(struct stack* stack){
-    (*stack).top=-1;
+struct stack* initializeStack()
+{
+    struct stack *stackptr = (struct stack*)malloc(sizeof(struct stack));
+    (*stackptr).top = -1;
+    return stackptr;
 }
 
-int isEmpty(struct stack* stack){
-    if((*stack).top==-1)
-    return 1;
+int isEmpty(struct stack *stack)
+{
+    if ((*stack).top == -1)
+        return 1;
     else
-    return 0;
+        return 0;
 }
 
-int isFull(struct stack* stack){
-    if((*stack).top == max_size - 1)
-    return 1;
+int isFull(struct stack *stack)
+{
+    if ((*stack).top == max_size - 1)
+        return 1;
     else
-    return 0;
+        return 0;
 }
 
-void push(struct stack* stack, int data){
-    if (isFull(stack)){
-        printf("Cannot puch data! Stack overflow.");
+void push(struct stack *stack, int data)
+{
+    if (isFull(stack))
+    {
+        printf("Stack Overflow!\n");
     }
-    else{
+    else
+    {
         (*stack).top++;
-        (*stack).data[stack->top]=data;
+        (*stack).data[stack->top] = data;
     }
 }
 
-int pop(struct stack* stack){
-    if (isEmpty(stack)){
-        printf("Cannot pop! Stack underflow.");
+int pop(struct stack *stack)
+{
+    if (isEmpty(stack))
+    {
+        printf("Stack Underflow.\n");
         return -1;
     }
-    else{
-        int poppedData = (*stack).data[(*stack).top];
+    else
+    {
+        printf("Popped Data:%d\n",stack->data[stack->top]);
         stack->top--;
-        return poppedData;
+        return 0;
     }
 }
 
-int peek(struct stack* stack){
-    if (isEmpty(stack)){
-        printf("Cannot peek! Stack is empty.");
+int peek(struct stack *stack)
+{
+    if (isEmpty(stack))
+    {
+        printf("Stack is empty.\n");
         return -1;
     }
-    else{
-        return (*stack).data[(*stack).top];
+    else
+    {
+        return stack->data[stack->top];
     }
 }
-
-void printStack(struct stack* stack){
-    if (isEmpty(stack)){
-        printf("Stack is Empty!");
+// Dhruv Agrahari S11 01 AIDS
+void printStack(struct stack *stack)
+{
+    if (isEmpty(stack))
+    {
+        printf("Stack is Empty.\n");
     }
-    else{
+    else
+    {
         printf("Stack:\n");
-        for (int i = stack->top; i >=0; i--)
+        for (int i = stack->top; i >= 0; i--)
         {
-            printf("%d", stack->data[i]);
+            printf("%d\n", stack->data[i]);
         }
-        
     }
-    
 }
 
-// int main(){
-//     struct stack stack;
-//     initializeStack(&stack);
+int main()
+{
+    system("cls");
+    struct stack *stack1 = NULL;
+    stack1 = initializeStack();
 
-//     push(&stack, 10);
-//     push(&stack,20);
-//     push(&stack,30);
+    int option = 0;
 
-//     printStack(&stack);
-    
-//     printf("Popped Data:%d\n",pop(&stack));
+    // char i[][] = {{"Enter your Choice:\n"}, {"1.Push 2.Pop 3.Peek 4.Print Stack\n"}};
 
-//     printf("Top Data:%d\n",peek(&stack));
+    while (option >= 0)
+    {
+        printf("Enter your choice:\n");
+        printf("1.Push 2.Pop 3.Peek 4.Print Stack 0.Exit\n");
+        scanf("%d", &option);
 
-//     return 0;
-// }
+        switch (option)
+        {
+        case 1:
+            printf("Enter data to be pushed:");
+            scanf("%d", stack1->data);
+            push(stack1, *stack1->data);
+            break;
+
+        case 2:
+            pop(stack1);
+            break;
+
+        case 3:
+            printf("%d\n",peek(stack1));
+            break;
+
+        case 4:
+            printStack(stack1);
+            break;
+
+        default:
+            exit(0);
+        }
+    }
+    free(stack1);
+    return 0;
+}
