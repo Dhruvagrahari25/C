@@ -17,14 +17,22 @@ struct LinkedList
 
 struct node *traverse(struct LinkedList *LinkedList)
 {
+    struct node *Temp = LinkedList->head;
     int n;
     printf("Enter how many nodes to traverse:");
     scanf("%d", &n);
-    struct node *Temp = LinkedList->head;
-    for (int i = 0; i < n - 1; i++)
+    if (n == 0)
     {
-        //printf("%d\n", Temp->data);
-        Temp->next = Temp->next;
+        Temp = LinkedList->head->prev;
+    }
+    else
+    {
+
+        for (int i = 0; i < n - 1; i++)
+        {
+            // printf("%d\n", Temp->data);
+            Temp = Temp->next;
+        }
     }
     return Temp;
 }
@@ -34,8 +42,9 @@ void addFront(struct LinkedList *LinkedList)
     struct node *NewNode = (struct node *)malloc(sizeof(struct node));
     NewNode->next = LinkedList->head;
     NewNode->prev = LinkedList->head->prev;
-    LinkedList->head->prev = NewNode;
     LinkedList->head->prev->next = NewNode;
+    LinkedList->head->prev = NewNode;
+    LinkedList->head = NewNode;
     printf("Enter Data:");
     scanf("%d", &NewNode->data);
 }
@@ -74,179 +83,202 @@ int isEmpty(struct LinkedList *LinkedList)
 
 // void addAfter(struct LinkedList *LinkedList)
 // {
-//     struct LinkedList* Temp = traverse(LinkedList)->next;
 //     struct node* original = LinkedList->head;
-//     LinkedList->head=Temp;
+//     LinkedList->head=traverse(LinkedList)->next;
 //     addFront(LinkedList);
 //     LinkedList->head=original;
 // }
-//Dhruv Agrahari S11 01 AIDS
+// Dhruv Agrahari S11 01 AIDS
 // void deleteAfter(struct LinkedList *LinkedList)
 // {
-//     struct LinkedList* Temp = traverse(LinkedList)->next;
 //     struct node* original = LinkedList->head;
-//     LinkedList->head=Temp;
+//     LinkedList->head=traverse(LinkedList)->next;
 //     deleteFront(LinkedList);
 //     LinkedList->head=original;
 // }
 
-void AddAfter(struct LinkedList* LinkedList){
-    struct node* temp=traverse(LinkedList)->next;
-    struct node* NewNode= (struct node*)malloc(sizeof(struct node));
+void AddAfter(struct LinkedList *LinkedList)
+{
+    struct node *temp = traverse(LinkedList)->next;
+    struct node *NewNode = (struct node *)malloc(sizeof(struct node));
     NewNode->next = temp;
-    NewNode->prev =temp->prev;
-    temp = NewNode;
+    NewNode->prev = temp->prev;
     temp->prev->next = NewNode;
+    temp->prev = NewNode;
     printf("Enter Data:");
     scanf("%d", &NewNode->data);
 }
 
-void deleteAfter(struct LinkedList* LinkedList){
-    struct node* temp= traverse(LinkedList)->next;
-    temp->prev->next=temp->next;
-    temp->next->prev=temp->prev;
+void deleteAfter(struct LinkedList *LinkedList)
+{
+    struct node *temp = traverse(LinkedList)->next;
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
     free(temp);
 }
+void print(struct LinkedList *LinkedList)
+{
+    printf("%d\n", traverse(LinkedList)->data);
+}
 
-void display(struct LinkedList* LinkedList){
-    struct node* Temp= LinkedList->head;
+void display(struct LinkedList *LinkedList)
+{
+    struct node *Temp = LinkedList->head;
     do
     {
-        printf("%d\t",Temp->data);
-        Temp=Temp->next;
-    } while (Temp!=LinkedList->head);
+        printf("%d\t", Temp->data);
+        Temp = Temp->next;
+    } while (Temp != LinkedList->head);
+    printf("\n");
 }
 
-void swap(struct LinkedList* LinkedList){
-    int n,m,temp;
-    printf("Enter the No. of nodes to be shifted:");
-    scanf("%d%d",&n,&m);
-    struct node* ptr1 = LinkedList->head;
-    for (int i = 0; i < n-1; i++)
+void swap(struct LinkedList *LinkedList)
+{
+    if (LinkedList->head == NULL)
     {
-        ptr1=ptr1->next;
+        printf("The List is Empty!\n");
     }
+    else
+    {
+        int n, m, temp;
+        printf("Enter the No. of nodes to be shifted:");
+        scanf("%d%d", &n, &m);
 
-    struct node* ptr2 = LinkedList->head;
-    for (int i = 0; i < m-1; i++)
-    {
-        ptr2=ptr2->next;
+        struct node *ptr1 = LinkedList->head;
+        for (int i = 0; i < n - 1; i++)
+        {
+            ptr1 = ptr1->next;
+        }
+
+        struct node *ptr2 = LinkedList->head;
+        for (int i = 0; i < m - 1; i++)
+        {
+            ptr2 = ptr2->next;
+        }
+        temp = ptr1->data;
+        ptr1->data = ptr2->data;
+        ptr2->data = temp;
     }
-    temp=ptr1->data;
-    ptr1->data=ptr2->data;
-    ptr2->data=temp;
-    free(temp);
 }
 
 int main()
 {
     system("cls");
     int option;
-    struct LinkedList* List1 = (struct LinkedList*)malloc(sizeof(struct LinkedList));
+    struct LinkedList *List1 = (struct LinkedList *)malloc(sizeof(struct LinkedList));
     List1->head = NULL;
     while (1)
     {
-    printf("-----MENU------\n");
-    printf("0.Exit\n1.AddFront\n2.AddEnd\n3.DeleteFront\n4.DeleteEnd\n5.AddAfter\n6.DeleteAfter\n7.Display\n8.TraverseTill\n9.Swap\n");
-    scanf("%d",&option);
-    switch (option)
-    {
-        case 0: exit;
-    case 1:
-    if (List1->head==NULL)
-    {
-        List1->head = (struct node*)malloc(sizeof(struct node));
-        List1->head->next=List1->head->prev=List1->head;
-        printf("Enter data:");
-        scanf("%d",&List1->head->data);
-    }else
-    {
-        addFront(List1);   
-    }
-        break;
-
-    case 2:
-        if (List1->head==NULL)
-    {
-        List1->head =  List1->head->next=List1->head->prev=(struct node*)malloc(sizeof(struct node));
-    }else
-    {
-        addEnd(List1);   
-    }
-        break;
-
-    case 3:
-        if (List1->head==NULL)
+        printf("-----MENU------\n");
+        printf("0.Exit\n1.AddFront\n2.AddEnd\n3.DeleteFront\n4.DeleteEnd\n5.AddAfter\n6.DeleteAfter\n7.Display\n8.IsEmpty\n9.Swap\n10.Print\n");
+        scanf("%d", &option);
+        switch (option)
         {
-            printf("UNDERFLOW!\n");
-        }
-        else
-        {
-            deleteFront(List1);
-        }
-        
-        break;
+        case 0:
+            exit(0);
+        case 1:
+            if (List1->head == NULL)
+            {
+                List1->head = (struct node *)malloc(sizeof(struct node));
+                List1->head->next = List1->head->prev = List1->head;
+                printf("Enter data:");
+                scanf("%d", &List1->head->data);
+            }
+            else
+            {
+                addFront(List1);
+            }
+            break;
 
-    case 4:
-        if (List1->head==NULL)
-        {
-            printf("UNDERFLOW!\n");
+        case 2:
+            if (List1->head == NULL)
+            {
+                List1->head = (struct node *)malloc(sizeof(struct node));
+                List1->head->next = List1->head->prev = List1->head;
+                printf("Enter data:");
+                scanf("%d", &List1->head->data);
+            }
+            else
+            {
+                addEnd(List1);
+            }
+            break;
+
+        case 3:
+            if (List1->head == NULL)
+            {
+                printf("UNDERFLOW!\n");
+            }
+            else
+            {
+                deleteFront(List1);
+            }
+
+            break;
+
+        case 4:
+            if (List1->head == NULL)
+            {
+                printf("UNDERFLOW!\n");
+            }
+            else
+            {
+                deleteEnd(List1);
+            }
+            break;
+
+        case 5:
+            if (List1->head == NULL)
+            {
+                List1->head = List1->head->next = List1->head->prev = (struct node *)malloc(sizeof(struct node));
+            }
+            else
+            {
+                AddAfter(List1);
+            }
+            break;
+
+        case 6:
+            if (List1->head == NULL)
+            {
+                printf("UNDERFLOW!\n");
+            }
+            else
+            {
+                deleteAfter(List1);
+            }
+            break;
+
+        case 7:
+            if (List1->head == NULL)
+            {
+                printf("List is Empty!\n");
+            }
+            else
+            {
+                display(List1);
+            }
+            break;
+
+        case 8:
+            if (List1->head == NULL)
+            {
+                printf("The list is Empty!\n");
+            }
+            break;
+
+        case 9:
+            swap(List1);
+            break;
+
+        case 10:
+            print(List1);
+            break;
+
+        default:
+            printf("Invalid Choice!\n");
+            break;
         }
-        else
-        {
-            deleteEnd(List1);
-        }
-        break;
-
-    case 5:
-            if (List1->head==NULL)
-    {
-        List1->head = List1->head->next=List1->head->prev=(struct node*)malloc(sizeof(struct node));
-    }else
-    {
-        AddAfter(List1);   
-    }
-        break;
-
-    case 6:
-        if (List1->head==NULL)
-        {
-            printf("UNDERFLOW!\n");
-        }
-        else
-        {
-            deleteEnd(List1);
-        }
-        break;
-
-    case 7:
-    if (List1->head==NULL)
-    {
-        printf("List is Empty!\n");
-    }
-    else
-    {
-        display(List1);
-    }
-        break;
-
-    case 8:
-    if (List1->head==NULL)
-    {
-        printf("The list is Empty!\n");
-    }else
-    {
-        traverse(List1);
-    }
-        break;
-
-    case 9:
-    swap(List1);
-    break;
-    default:
-    printf("Invalid Choice!\n");
-        break;
-    }
     }
     return 0;
 }
