@@ -40,8 +40,7 @@ void push(struct stack *stack, int data)
     }
     else
     {
-        stack->top++;
-        stack->data[stack->top] = data;
+        stack->data[++stack->top] = data;
     }
 }
 
@@ -64,7 +63,7 @@ int peek(struct stack *stack)
 {
     if (isEmpty(stack))
     {
-        printf("Stack is empty.\n");
+        printf("Stack is empty!\n");
         return 0;
     }
     else
@@ -77,18 +76,15 @@ void printStack(struct stack *stack)
 {
     if (isEmpty(stack))
     {
-        printf("Stack is Empty.\n");
+        printf("Stack is Empty!\n");
     }
     else
     {
         printf("Stack:\n");
-        for (int i = stack->top; i > 0; i--)
+        for (int i = stack->top; i >= 0; i--)
         {
             printf("%d\n",stack->data[i]);
-        } printf("%d\n",stack->data[0]);
-        
-        
-        
+        }
     }
 }
 
@@ -105,16 +101,18 @@ int main()
     while (option >= 0)
     {
         printf("Enter your choice:\n");
-        printf("1.Push 2.Pop 3.Peek 4.Print Stack 0.Exit\n");
+        printf("---MENU---\n1.Push\n2.Pop\n3.Peek\n4.Print Stack\n0.Exit\n");
         scanf("%d", &option);
 
         switch (option)
         {
         case 1:
             printf("Enter data to be pushed:");
-            scanf("%d", stack1->data);
-            push(stack1, *stack1->data);
+            int data;
+            scanf("%d", &data);
+            push(stack1, data);
             break;
+
 
         case 2:
             pop(stack1);
