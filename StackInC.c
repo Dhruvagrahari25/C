@@ -9,16 +9,16 @@ struct stack
     int data[max_size];
 };
 
-struct stack* initializeStack()
+struct stack* initializeStack(struct stack *stackptr)
 {
-    struct stack *stackptr = (struct stack*)malloc(sizeof(struct stack));
-    (*stackptr).top = -1;
+    stackptr = (struct stack*)malloc(sizeof(struct stack));
+    stackptr->top = -1;
     return stackptr;
 }
 
 int isEmpty(struct stack *stack)
 {
-    if ((*stack).top == -1)
+    if (stack->top == -1)
         return 1;
     else
         return 0;
@@ -40,8 +40,8 @@ void push(struct stack *stack, int data)
     }
     else
     {
-        (*stack).top++;
-        (*stack).data[stack->top] = data;
+        stack->top++;
+        stack->data[stack->top] = data;
     }
 }
 
@@ -49,14 +49,14 @@ int pop(struct stack *stack)
 {
     if (isEmpty(stack))
     {
-        printf("Stack Underflow.\n");
+        printf("Stack Underflow!\n");
         return -1;
     }
     else
     {
         printf("Popped Data:%d\n",stack->data[stack->top]);
         stack->top--;
-        return 0;
+        // return 0;
     }
 }
 
@@ -65,7 +65,7 @@ int peek(struct stack *stack)
     if (isEmpty(stack))
     {
         printf("Stack is empty.\n");
-        return -1;
+        return 0;
     }
     else
     {
@@ -82,10 +82,13 @@ void printStack(struct stack *stack)
     else
     {
         printf("Stack:\n");
-        for (int i = stack->top; i >= 0; i--)
+        for (int i = stack->top; i > 0; i--)
         {
-            printf("%d\n", stack->data[i]);
-        }
+            printf("%d\n",stack->data[i]);
+        } printf("%d\n",stack->data[0]);
+        
+        
+        
     }
 }
 
@@ -93,7 +96,7 @@ int main()
 {
     system("cls");
     struct stack *stack1 = NULL;
-    stack1 = initializeStack();
+    stack1 = initializeStack(stack1);
 
     int option = 0;
 
