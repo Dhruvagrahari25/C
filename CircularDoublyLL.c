@@ -15,12 +15,9 @@ struct LinkedList
     struct node *head;
 };
 
-struct node *traverse(struct LinkedList *LinkedList)
+struct node *traverse(struct LinkedList *LinkedList, int n)
 {
     struct node *Temp = LinkedList->head;
-    int n;
-    printf("Enter how many nodes to traverse:");
-    scanf("%d", &n);
     if (n == 0)
     {
         Temp = LinkedList->head->prev;
@@ -83,42 +80,68 @@ int isEmpty(struct LinkedList *LinkedList)
 
 // void addAfter(struct LinkedList *LinkedList)
 // {
+//     struct LinkedList* Temp = traverse(LinkedList)->next;
 //     struct node* original = LinkedList->head;
-//     LinkedList->head=traverse(LinkedList)->next;
+//     LinkedList->head=Temp;
 //     addFront(LinkedList);
 //     LinkedList->head=original;
 // }
 // Dhruv Agrahari S11 01 AIDS
 // void deleteAfter(struct LinkedList *LinkedList)
 // {
+//     struct LinkedList* Temp = traverse(LinkedList)->next;
 //     struct node* original = LinkedList->head;
-//     LinkedList->head=traverse(LinkedList)->next;
+//     LinkedList->head=Temp;
 //     deleteFront(LinkedList);
 //     LinkedList->head=original;
 // }
 
 void AddAfter(struct LinkedList *LinkedList)
 {
-    struct node *temp = traverse(LinkedList)->next;
-    struct node *NewNode = (struct node *)malloc(sizeof(struct node));
-    NewNode->next = temp;
-    NewNode->prev = temp->prev;
-    temp->prev->next = NewNode;
-    temp->prev = NewNode;
-    printf("Enter Data:");
-    scanf("%d", &NewNode->data);
+    int n;
+    printf("Enter the no. of Nodes after which the new node is to be added:");
+    scanf("%d", &n);
+    if (n<=0)
+    {
+        printf("Invalid!\n");
+    }
+    else
+    {
+
+        struct node *temp = traverse(LinkedList, n)->next;
+        struct node *NewNode = (struct node *)malloc(sizeof(struct node));
+        NewNode->next = temp;
+        NewNode->prev = temp->prev;
+        temp->prev->next = NewNode;
+        temp->prev = NewNode;
+        printf("Enter Data:");
+        scanf("%d", &NewNode->data);
+    }
 }
 
 void deleteAfter(struct LinkedList *LinkedList)
 {
-    struct node *temp = traverse(LinkedList)->next;
-    temp->prev->next = temp->next;
-    temp->next->prev = temp->prev;
-    free(temp);
+    int n;
+    printf("Enter the no. of Nodes after which the new node is to be deleted:");
+    scanf("%d", &n);
+    if (n <= 0)
+    {
+        printf("Invalid!\n");
+        }
+    else
+    {
+        struct node *temp = traverse(LinkedList, n)->next;
+        temp->prev->next = temp->next;
+        temp->next->prev = temp->prev;
+        free(temp);
+    }
 }
 void print(struct LinkedList *LinkedList)
 {
-    printf("%d\n", traverse(LinkedList)->data);
+    int n;
+    printf("Enter the no. of nodes to be traversed:");
+    scanf("%d", &n);
+    printf("%d\n", traverse(LinkedList, n)->data);
 }
 
 void display(struct LinkedList *LinkedList)
@@ -170,7 +193,7 @@ int main()
     while (1)
     {
         printf("-----MENU------\n");
-        printf("0.Exit\n1.AddFront\n2.AddEnd\n3.DeleteFront\n4.DeleteEnd\n5.AddAfter\n6.DeleteAfter\n7.Display\n8.IsEmpty\n9.Swap\n10.Print\n");
+        printf("0.Exit\n1.AddFront\n2.AddEnd\n3.DeleteFront\n4.DeleteEnd\n5.AddAfter\n6.DeleteAfter\n7.Display\n8.IsEmpty\n\n");
         scanf("%d", &option);
         switch (option)
         {
@@ -264,16 +287,20 @@ int main()
             if (List1->head == NULL)
             {
                 printf("The list is Empty!\n");
+            }else
+            {
+                printf("The List is NOT Empty.\n");
             }
+            
             break;
 
-        case 9:
-            swap(List1);
-            break;
+            // case 9:
+            //     swap(List1);
+            //     break;
 
-        case 10:
-            print(List1);
-            break;
+            // case 10:
+            //     print(List1);
+            //     break;
 
         default:
             printf("Invalid Choice!\n");
