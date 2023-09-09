@@ -64,7 +64,7 @@ int peek(struct stack *stack)
     if (isEmpty(stack))
     {
         printf("Stack is empty!\n");
-        return 0;
+        return -1;
     }
     else
     {
@@ -101,11 +101,14 @@ int main()
     while (option >= 0)
     {
         printf("Enter your choice:\n");
-        printf("---MENU---\n1.Push\n2.Pop\n3.Peek\n4.Print Stack\n0.Exit\n");
+        printf("---MENU---\n0.Exit\n1.Push\n2.Pop\n3.Peek\n4.Print Stack\n5.Is Empty\n6.Is Full\n\n");
         scanf("%d", &option);
 
         switch (option)
         {
+
+            case 0:
+            exit(0);
         case 1:
             printf("Enter data to be pushed:");
             int data;
@@ -119,15 +122,39 @@ int main()
             break;
 
         case 3:
-            printf("%d\n",peek(stack1));
+            peek(stack1);
             break;
 
         case 4:
             printStack(stack1);
             break;
 
+        case 5:
+            if (isEmpty(stack1))
+            {
+                printf("Stack is Empty!\n");
+            }
+            else
+            {
+                printf("Stack is NOT Empty.\n");
+            }
+            
+            break;
+
+        case 6:
+            if (isFull(stack1))
+            {
+                printf("Stack is Full!\n");
+            }
+            else
+            {
+                printf("Stack is NOT Full.\n");
+            }
+            
+            break;
+
         default:
-            exit(0);
+            printf("Invalid!\n");
         }
     }
     free(stack1);
