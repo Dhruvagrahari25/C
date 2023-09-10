@@ -6,112 +6,224 @@ struct node
     int data;
     struct node *next;
 };
+
 struct list
 {
     struct node *head;
 };
 
-void InsertAtFront(struct list *listptr, struct node *nodeptr)
+// Function to initialize an empty list
+void InitializeList(struct list *listPtr)
 {
-    nodeptr->next = listptr->head;
-    listptr->head = nodeptr;
+    listPtr->head = NULL;
 }
 
-void Traverse(struct list *listptr, struct node *nodeptr)
+void InsertAtFront(struct list *listptr, int data)
 {
-    nodeptr = listptr->head;
-    do
+    struct node *NewNode = (struct node *)malloc(sizeof(struct node));
+    if (NewNode == NULL)
     {
-        printf("%d\n", nodeptr->data);
-        nodeptr = nodeptr->next;
-    } while (nodeptr != NULL);
-}
-
-void InsertAtEnd(struct node *nodeptr, int data)
-{
-    struct node* NewNode = (struct node*)malloc(sizeof(struct node));
-    NewNode->next = NULL;
-    
-    // Traversing the list to find the last node
-    while (nodeptr->next != NULL)
-    {
-        nodeptr = nodeptr->next;
+        printf("Memory allocation failed.\n");
+        exit(1);
     }
-
-    // Adding the new node to the end of the list
-    nodeptr->next = NewNode;
-    
-    // Assigning data to the new node
     NewNode->data = data;
+    NewNode->next = listptr->head;
+    listptr->head = NewNode;
 }
 
-void InsertAtX(struct node* Nodeptr, int count, int Data){
-    struct node* NewNode = (struct node*)malloc(sizeof(struct node));
-    struct node* temp = Nodeptr;
-    
-    for (int i = 1; i < count-1; i++)
+void DeleteFront(struct list *ListPtr)
+{
+    struct node *Temp = ListPtr->head;
+    ListPtr->head = ListPtr->head->next;
+    printf("Deleted data:%d\n", Temp->data);
+    free(Temp);
+}
+
+void DeleteEnd(struct list *ListPtr)
+{
+    struct node *temp = ListPtr->head;
+    while (temp->next->next != NULL)
     {
         temp = temp->next;
     }
-    NewNode->next = temp->next; 
+    printf("Delete data:%d\n", temp->next->data);
+    free(temp->next);
+    temp->next = NULL;
+}
+
+void InsertAtEnd(struct list *listPtr, int data)
+{
+    struct node *NewNode = (struct node *)malloc(sizeof(struct node));
+    if (NewNode == NULL)
+    {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    NewNode->data = data;
+    NewNode->next = NULL;
+
+    if (listPtr->head == NULL)
+    {
+        listPtr->head = NewNode;
+        return;
+    }
+    // DHRUV AGRAHARI S11 01 AIDS
+    struct node *temp = listPtr->head;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    temp->next = NewNode;
+}
+
+void InsertAtX(struct list *ListPtr, int count, int Data)
+{
+    struct node *NewNode = (struct node *)malloc(sizeof(struct node));
+    if (NewNode == NULL)
+    {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+
+    struct node *temp = ListPtr->head;
+
+    if (count <= 0)
+    {
+        printf("Invalid Position.\n");
+        free(NewNode);
+        return;
+    }
+    else
+    {
+
+        for (int i = 0; i < count; i++)
+        {
+            temp = temp->next;
+            if (temp == NULL)
+            {
+                printf("Invalid position.\n");
+                free(NewNode);
+                return;
+            }
+        }
+    }
+
+    NewNode->next = temp->next;
     temp->next = NewNode;
     NewNode->data = Data;
 }
 
-void DeleteAtX(struct node* Nodeptr, int count){
-    struct node* temp = Nodeptr;
-    for (int i = 0; i < count; i++)
+void DeleteAtX(struct list *ListPtr, int count)
+{
+    struct node *temp = ListPtr->head;
+
+    if (count <= 0)
     {
+        printf("Invalid Position.\n");
+        return;
+    }
+    else
+    {
+
+        for (int i = 0; i < count - 1; i++)
+        {
+            temp = temp->next;
+            if (temp == NULL || temp->next == NULL)
+            {
+                printf("Invalid position.\n");
+                return;
+            }
+        }
+    }
+
+    struct node *temp2 = temp->next;
+    temp->next = temp->next->next;
+    free(temp2);
+}
+
+void PrintList(struct list *ListPtr)
+{
+    struct node *temp = ListPtr->head;
+
+    printf("List: ");
+    while (temp != NULL)
+    {
+        printf("%d--> ", temp->data);
         temp = temp->next;
     }
-    temp->next = temp->next->next;
+    printf("NULL\n");
 }
 
 int main()
 {
     system("cls");
+    struct list myList;
+    InitializeList(&myList);
 
-    struct node *nodeptr2 = NULL;
-    struct list *listptr2 = NULL;
+    int choice, data, position;
 
-    nodeptr2 = (struct node *)malloc(sizeof(struct node));
-    listptr2 = (struct list *)malloc(sizeof(struct list));
-    printf("Enter Data to be inserted at the begining:");
-    scanf("%d", &(*nodeptr2).data);
-    listptr2->head = NULL;
-    (*nodeptr2).next = NULL;
-    if (listptr2->head == NULL)
+    while (1)
     {
-        printf("List is Empty! Adding the first node.\n");
-        listptr2->head = nodeptr2;
-    }
-    else
-    {
-        InsertAtFront(listptr2, nodeptr2);
+        printf("----MENU----\n1. Insert at Front\n2. Insert at End\n3. Insert at Position\n4. Delete at Position\n5. Print List\n6. DeleteFront\n7. DeleteEnd\n0. Exit\n");
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 0:
+            exit(0);
+        case 1:
+            printf("Enter data to insert at front: ");
+            scanf("%d", &data);
+            InsertAtFront(&myList, data);
+            break;
+        case 2:
+            printf("Enter data to insert at end: ");
+            scanf("%d", &data);
+            InsertAtEnd(&myList, data);
+            break;
+        case 3:
+            printf("Enter position and data to insert: ");
+            scanf("%d %d", &position, &data);
+            InsertAtX(&myList, position, data);
+            break;
+        case 4:
+            if (myList.head == NULL)
+            {
+                printf("Underflow!\n");
+            }
+            else
+            {
+                printf("Enter position to delete: ");
+                scanf("%d", &position);
+                DeleteAtX(&myList, position);
+            }
+            break;
+        case 5:
+            PrintList(&myList);
+            break;
+        case 6:
+            if (myList.head == NULL)
+            {
+                printf("Underflow!\n");
+            }
+            else
+            {
+                DeleteFront(&myList);
+            }
+            break;
+        case 7:
+            if (myList.head == NULL)
+            {
+                printf("Underflow!\n");
+            }
+            else
+            {
+                DeleteEnd(&myList);
+            }
+            break;
+        default:
+            printf("Invalid choice!\n");
+        }
     }
 
-    int DataAtEnd;
-    printf("Enter data to be inserted at End:");
-    scanf("%d",&DataAtEnd);
-    InsertAtEnd(nodeptr2,DataAtEnd);
-
-    printf("Enter data to be inserted in the middle:");
-    int DataAtX;
-    scanf("%d",&DataAtX);
-    InsertAtX(nodeptr2, 2, DataAtX);
-
-    printf("Enter the position of the node to be deleted:");
-    int count = 0;
-    scanf("%d",&count);
-    DeleteAtX(nodeptr2,count);
-
-    if (listptr2->head == NULL)
-    {
-        printf("List is Empty\n");
-    }
-    else
-    {
-        Traverse(listptr2, nodeptr2);
-    }
     return 0;
 }
